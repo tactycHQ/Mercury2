@@ -1,6 +1,6 @@
 #MERCURY 1
 import logging
-from keras.callbacks import ModelCheckpoint, TensorBoard, CSVLogger
+from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard, CSVLogger
 
 class Trainer:
     def __init__(self,model,X_train,Y_train,epochs,batch_size):

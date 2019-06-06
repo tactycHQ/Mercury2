@@ -35,7 +35,7 @@ def main(data,load=0):
 
     # load model from h5 file
     if load == 1:
-        dense_model.load(".\saved_models\\Mercury 1.h5")
+        dense_model.load(".\saved_models\\Mercury 2.h5")
         results = dense_model.model.evaluate(X_test,Y_test,batch_size=32)
         print('test loss, test acc:',results)
 
@@ -45,12 +45,12 @@ def main(data,load=0):
         dense_model.build_model()
 
         print('Create the trainer')
-        trainer = Trainer(dense_model.model,X_train,Y_train,epochs=100,batch_size=32)
+        trainer = Trainer(dense_model.model,X_train,Y_train,epochs=10,batch_size=32)
 
         print('Start training the model.')
         trainer.train()
 
-        dense_model.save(".\saved_models\\Mercury 1.h5")
+        dense_model.save(".\saved_models\\Mercury 2.h5")
 
 
 def combineData(mypath):

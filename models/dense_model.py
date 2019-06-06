@@ -1,7 +1,8 @@
 #MERCURY 1
 import logging
 import tensorflow as tf
-from keras import layers, Sequential, optimizers, models
+from tensorflow.keras import layers, Sequential, optimizers, models
+# from keras import layers, Sequential, optimizers, models
 
 class DenseModel:
 
