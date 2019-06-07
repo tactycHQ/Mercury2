@@ -1,4 +1,4 @@
-#MERCURY 1
+#MERCURY 1 DEV
 import logging
 import pandas as pd
 import sys
