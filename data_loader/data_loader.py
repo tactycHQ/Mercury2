@@ -175,10 +175,11 @@ class DataLoader:
         splits inputs and targets into training and test sets
         :return:
         """
-        self.X_train, self.X_test, Y_train,Y_test = train_test_split(self.inputs_trunc,self.targets_ohe_trunc,test_size=0.2,random_state=1,stratify=None)
-        self.Y_train=np.reshape(Y_train,(-1, Y_train.shape[1]))
-        self.Y_test=np.reshape(Y_test,(-1, Y_test.shape[1]))
-        logging.info("Train and test sets have been split")
+        self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(self.inputs_trunc,self.targets_ohe_trunc,test_size=0.2,random_state=1,stratify=None)
+        self.X_train, self.X_val, self.Y_train, self.Y_val = train_test_split(self.X_train, self.Y_train,test_size=0.2, random_state=1, stratify=None)
+        self.Y_train=np.reshape(self.Y_train,(-1, self.Y_train.shape[1]))
+        self.Y_test=np.reshape(self.Y_test,(-1, self.Y_test.shape[1]))
+        logging.info("Train, validation, test sets have been split")
 
     def NormalizeData(self):
         """
@@ -188,12 +189,16 @@ class DataLoader:
         sc = StandardScaler()
         sc.fit(self.X_train)
         self.X_train_std = sc.transform(self.X_train)
+        self.X_val_std = sc.transform(self.X_val)
         self.X_test_std = sc.transform(self.X_test)
 
-        logging.info("Train and test sets have been normalized")
+
+        logging.info("Train, validation, and test sets have been normalized")
         logging.info("X_train_std shape is %s", self.X_train_std.shape)
+        logging.info("X_val_std shape is %s", self.X_val_std.shape)
         logging.info("X_test_std is %s", self.X_test_std.shape)
         logging.info("Y_train shape is %s", self.Y_train.shape)
+        logging.info("Y_test shape is %s", self.Y_val.shape)
         logging.info("Y_test shape is %s", self.Y_test.shape)
 
 

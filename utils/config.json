@@ -1,6 +1,6 @@
 {
   "experiment":{
-    "load":true,
+    "load":false,
     "window": 10,
     "threshold": 0.03,
     "featselect":0,
@@ -8,7 +8,7 @@
   },
   "model": {
     "shuffle": 200,
-    "epochs": 20,
+    "epochs": 40,
     "batch_size":64,
     "layer1": 256,
     "layer2":128,
