@@ -13,7 +13,7 @@ class DataLoader:
 
     def __init__(self,fname, window=1,threshold=0.05,technicals=0,featselect=0,drop=0):
 
-        logging.info("Loading Data")
+        logging.info("----------Loading Data for %s-----------",fname)
 
         self.window = window
         self.threshold = threshold
