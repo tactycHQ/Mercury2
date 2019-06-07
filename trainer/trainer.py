@@ -3,12 +3,12 @@ import logging
 from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard, CSVLogger
 
 class Trainer:
-    def __init__(self,model,X_train,Y_train,epochs,batch_size):
+    def __init__(self,model,dataset,epochs,batch_size,steps_per_epoch):
         self.model=model
-        self.X_train=X_train
-        self.Y_train=Y_train
+        self.dataset=dataset
         self.epochs=epochs
         self.batch_size=batch_size
+        self.steps_per_epoch=steps_per_epoch
         self.callbacks=[]
         self.loss=[]
         self.acc=[]
@@ -34,10 +34,10 @@ class Trainer:
     def train(self):
         logging.info("Beginning Model Fit")
         history = self.model.fit(
-        self.X_train,
-        self.Y_train,
+        self.dataset,
         epochs=self.epochs,
         batch_size=self.batch_size,
+        steps_per_epoch = self.steps_per_epoch,
         callbacks=self.callbacks
         )
         self.loss.extend(history.history['loss'])
