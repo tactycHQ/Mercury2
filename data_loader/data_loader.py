@@ -4,10 +4,12 @@ import pandas as pd
 import sys
 import numpy as np
 from ta import *
-from feature_selector import  FeatureSelector
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.model_selection import train_test_split
-logging.basicConfig(level=logging.DEBUG,format='%(asctime)s-%(process)d-%(levelname)s-%(message)s',datefmt='%d-%b-%y %H:%M:%S',stream=sys.stdout)
+logging.basicConfig(level=logging.DEBUG ,
+                    format='%(asctime)s-%(process)d-%(levelname)s-%(message)s' ,
+                    datefmt='%d-%b-%y %H:%M:%S',
+                    stream=sys.stdout)
 
 class DataLoader:
 

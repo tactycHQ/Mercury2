@@ -2,14 +2,11 @@
 import logging
 import tensorflow as tf
 from tensorflow.keras import layers, Sequential, optimizers, models
-# from keras import layers, Sequential, optimizers, models
 
 class DenseModel:
-
     def __init__(self,features):
         self.model=None
         self.features=features
-        tf.logging.set_verbosity(tf.logging.ERROR)
 
     def build_model(self):
         """
@@ -26,7 +23,7 @@ class DenseModel:
         logging.info('Compiling model...')
         self.model.compile(optimizer=optimizers.Adam(0.001),
                       loss='categorical_crossentropy',
-                      metrics=['accuracy'])
+                      metrics=['acc'])
         print(self.model.summary())
         return self.model
 

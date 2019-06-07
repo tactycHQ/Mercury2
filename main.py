@@ -9,8 +9,6 @@ from os.path import isfile, join
 import tensorflow as tf
 from tensorflow.data import Dataset
 
-
-
 #GLOBAL VARIABLES
 mypath = "D:\\Dropbox\\9. Data\\Mercury Data\\CSV"
 
@@ -39,51 +37,49 @@ def main(data, num_features,load=0):
         trainer.train()
         dense_model.save(".\saved_models\\Mercury 2.h5")
 
-def combineData(mypath):
+def getData(mypath):
     onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     data_dict = {}
-    arr = []
+
     for f in onlyfiles:
         key = f.replace('.csv', '')
         data_dict.update({key: mypath + "\\" + f})
+
+    data = []
     for k in data_dict:
         fname = data_dict[k]
-        arr.append(DataLoader(fname,
+        data.append(DataLoader(fname,
                               window=10,
                               threshold=0.03,
                               technicals=0,
                               featselect=0,
                               drop=0))
-    return arr
-
-if __name__ == '__main__':
-
-    # tf.enable_eager_execution()
-    data = combineData(mypath)
-
-    #initialize numpy arrays for training and test data
+    # initialize numpy arrays for training and test data
     X_train = data[0].X_train_std
     Y_train = data[0].Y_train
     X_test = data[0].X_test_std
     Y_test = data[0].Y_test
-    num_features = X_train.shape[1]
 
     # add other stocks to previously initialized numpy arrays
-    for i in range(1,len(data)):
-        X_train = np.concatenate((X_train,data[i].X_train_std), axis=0)
-        Y_train = np.concatenate((Y_train,data[i].Y_train), axis = 0)
-        X_test = np.concatenate((X_test,data[i].X_test_std), axis = 0)
-        Y_test = np.concatenate((Y_test,data[i].Y_test), axis = 0)
+    for i in range(1, len(data)):
+        X_train = np.concatenate((X_train, data[i].X_train_std), axis=0)
+        Y_train = np.concatenate((Y_train, data[i].Y_train), axis=0)
+        X_test = np.concatenate((X_test, data[i].X_test_std), axis=0)
+        Y_test = np.concatenate((Y_test, data[i].Y_test), axis=0)
 
-    logging.info('----------Combining datasets across all CSVs-----------')
+    return X_train, Y_train,X_test,Y_test
+
+if __name__ == '__main__':
+
+    logging.info('----------Getting Data all CSVs-----------')
+    X_train, Y_train, X_test, Y_test = getData(mypath)
+    num_features = X_train.shape[1]
     logging.info('Size of X_Train: %s', X_train.shape)
     logging.info('Size of Y_Train: %s', Y_train.shape)
     logging.info('----------Data loaded successfully------------')
 
     # convert data to tf.data format
-    X_train_dataset = Dataset.from_tensor_slices(X_train)
-    Y_train_dataset = Dataset.from_tensor_slices(Y_train)
-    final_dataset = Dataset.zip((X_train_dataset,Y_train_dataset))
+    final_dataset = Dataset.from_tensor_slices((X_train, Y_train))
     final_dataset = final_dataset.shuffle(200).batch(64).repeat()
 
     main(final_dataset,num_features, load=0)
