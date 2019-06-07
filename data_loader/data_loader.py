@@ -3,7 +3,7 @@ import logging
 import pandas as pd
 import sys
 import numpy as np
-from ta import *
+from feature_selector import FeatureSelector
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.model_selection import train_test_split
 logging.basicConfig(level=logging.DEBUG ,
@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG ,
 
 class DataLoader:
 
-    def __init__(self,fname, window=1,threshold=0.05,technicals=0,featselect=0,drop=0):
+    def __init__(self,fname, window=1,threshold=0.05,featselect=0,drop=0):
 
         logging.info("----------Loading Data for %s-----------",fname)
 
@@ -21,7 +21,6 @@ class DataLoader:
         self.threshold = threshold
         self.featselect=featselect
         self.drop=drop
-        self.technicals=technicals
 
         self.dates = None
         self.features=None
@@ -58,12 +57,6 @@ class DataLoader:
         self.prices = df['IQ_LASTSALEPRICE'].values.reshape(-1, 1)
         self.bmark = df['BENCHMARK'].values.reshape(-1, 1)
         self.createTargets()
-
-        #add technical features
-        if self.technicals==1:
-            df = add_all_ta_features(df, "IQ_OPENPRICE", "IQ_HIGHPRICE", "IQ_LOWPRICE", "IQ_CLOSEPRICE", "IQ_VOLUME",fillna=False)
-            df.to_csv(".\\utils\\csv\\DF with TA.csv")
-        else: pass
 
         #save summary of all features to csv
         df.describe(include='all').to_csv(".\\utils\\csv\\all_features.csv")

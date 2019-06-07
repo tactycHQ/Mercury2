@@ -4,9 +4,10 @@ import tensorflow as tf
 from tensorflow.keras import layers, Sequential, optimizers, models
 
 class DenseModel:
-    def __init__(self,features):
+    def __init__(self,features,config):
         self.model=None
         self.features=features
+        self.config = config
 
     def build_model(self):
         """
@@ -16,14 +17,14 @@ class DenseModel:
         logging.info('Building model...')
         self.model = Sequential()
 
-        self.model.add(layers.Dense(256, activation='relu',input_shape=(self.features,)))
-        self.model.add(layers.Dense(128, activation='relu'))
-        self.model.add(layers.Dense(3, activation='softmax'))
+        self.model.add(layers.Dense(self.config.model.layer1, activation='relu',input_shape=(self.features,)))
+        self.model.add(layers.Dense(self.config.model.layer2, activation='relu'))
+        self.model.add(layers.Dense(self.config.model.layer3, activation='softmax'))
 
         logging.info('Compiling model...')
-        self.model.compile(optimizer=optimizers.Adam(0.001),
-                      loss='categorical_crossentropy',
-                      metrics=['acc'])
+        self.model.compile(optimizer=optimizers.Adam(self.config.model.lr),
+                           loss=self.config.model.loss_fn,
+                           metrics=[self.config.model.metrics])
         print(self.model.summary())
         return self.model
 
