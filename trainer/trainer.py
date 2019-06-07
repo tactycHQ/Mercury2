@@ -30,15 +30,13 @@ class Trainer:
             )
         )
 
-
     def train(self):
         logging.info("Beginning Model Fit")
         history = self.model.fit(
-        self.dataset,
-        epochs=self.epochs,
-        batch_size=self.batch_size,
-        steps_per_epoch = self.steps_per_epoch,
-        callbacks=self.callbacks
+                  self.dataset,
+                  epochs=self.epochs,
+                  steps_per_epoch = self.steps_per_epoch,
+                  callbacks=self.callbacks
         )
         self.loss.extend(history.history['loss'])
         self.acc.extend(history.history['acc'])
