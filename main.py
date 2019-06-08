@@ -28,7 +28,7 @@ def main():
     # load model from h5 file
     if load_flag == True:
         print('Loading saved model')
-        dense_model.load(".\saved_models\\Mercury 2.h5")
+        dense_model.load(".\saved_models\\run17.h5")
         results = dense_model.model.evaluate(test_dataset,steps=int(num_test_samples/(config.model.batch_size)))
         print('test loss, test acc:', results)
 
