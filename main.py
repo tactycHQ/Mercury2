@@ -27,10 +27,13 @@ def main():
 
     # load model from h5 file
     if load_flag == True:
-        print('Loading saved model')
-        dense_model.load(".\saved_models\\run17.h5")
-        results = dense_model.model.evaluate(test_dataset,steps=int(num_test_samples/(config.model.batch_size)))
-        print('test loss, test acc:', results)
+        try:
+            print('Loading saved model')
+            dense_model.load(".\saved_models\\run16.h5")
+            results = dense_model.model.evaluate(test_dataset,steps=int(num_test_samples/(config.model.batch_size)))
+            print('test loss, test acc:', results)
+        except Exception as ex:
+            print("Invalid model file name provided")
 
     # build and train and save a new model
     elif load_flag == False:
@@ -46,7 +49,7 @@ def main():
         )
         print('Start training the model.')
         trainer.train()
-        dense_model.save(".\saved_models\\Mercury 2.h5")
+        dense_model.save(".\saved_models\\Mercury2.h5")
     else:
         print("Invalid load flag in config file")
 
