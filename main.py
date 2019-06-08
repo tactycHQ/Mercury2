@@ -112,5 +112,6 @@ def getData(mypath, config):
     return train_dataset, val_dataset, test_dataset, num_train_features, num_train_samples, num_val_samples, num_test_samples
 
 if __name__ == '__main__':
-    main()
     os.system("tensorboard --logdir=.\\logs\\")
+    main()
+
