@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG ,
 
 class DataLoader:
 
-    def __init__(self,fname, window=1,threshold=0.05,featselect=0,drop=0):
+    def __init__(self,fname, window=1,threshold=0.05,featselect=0,drop=0,split=0.2):
 
         logging.info("----------Loading Data for %s-----------",fname)
 
@@ -21,6 +21,7 @@ class DataLoader:
         self.threshold = threshold
         self.featselect=featselect
         self.drop=drop
+        self.split=split
 
         self.dates = None
         self.features=None
@@ -72,6 +73,7 @@ class DataLoader:
         logging.info("All Features List Saved Under final_features.csv")
 
         return df
+
 
     def truncateData(self):
         """
@@ -175,8 +177,8 @@ class DataLoader:
         splits inputs and targets into training and test sets
         :return:
         """
-        self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(self.inputs_trunc,self.targets_ohe_trunc,test_size=0.2,random_state=1,stratify=None)
-        self.X_train, self.X_val, self.Y_train, self.Y_val = train_test_split(self.X_train, self.Y_train,test_size=0.2, random_state=1, stratify=None)
+        self.X_train, self.X_test, self.Y_train, self.Y_test = train_test_split(self.inputs_trunc,self.targets_ohe_trunc,test_size=self.split,random_state=1,stratify=None)
+        self.X_train, self.X_val, self.Y_train, self.Y_val = train_test_split(self.X_train, self.Y_train,test_size=self.split, random_state=1, stratify=None)
         self.Y_train=np.reshape(self.Y_train,(-1, self.Y_train.shape[1]))
         self.Y_test=np.reshape(self.Y_test,(-1, self.Y_test.shape[1]))
         logging.info("Train, validation, test sets have been split")

@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import tensorflow as tf
-from keras import layers
-from keras.models import Sequential
-from keras import datasets
+from tensorflow.keras import layers
+from tensorflow.keras.models import Sequential
+from tensorflow.keras import datasets
 
 
 mnist = datasets.mnist
