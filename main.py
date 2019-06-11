@@ -13,7 +13,6 @@ from tensorflow.data import Dataset
 # GLOBAL VARIABLES
 mypath = "D:\\Dropbox\\9. Data\\Mercury Data\\CSV"
 
-
 def main():
     # Processing config file
     config = get_config_from_json('.\\utils\\config.json')
@@ -29,7 +28,7 @@ def main():
     if load_flag == True:
         try:
             print('Loading saved model')
-            dense_model.load(".\saved_models\\run16.h5")
+            dense_model.load(".\saved_models\\M2.h5")
             results = dense_model.model.evaluate(test_dataset,steps=int(num_test_samples/(config.model.batch_size)))
             print('test loss, test acc:', results)
         except Exception as ex:
@@ -37,24 +36,26 @@ def main():
 
     # build and train and save a new model
     elif load_flag == False:
-        dense_model.build_model()
-
-        print('Create the trainer')
-        trainer = Trainer(dense_model.model,
-                          train_dataset,
-                          val_dataset,
-                          config,
-                          steps_per_epoch = int(num_train_samples/config.model.batch_size),
-                          val_steps = int(num_val_samples/config.model.batch_size)
-        )
-        print('Start training the model.')
-        trainer.train()
-        dense_model.save(".\saved_models\\M2.h5")
+        try:
+            dense_model.build_model()
+            print('Create the trainer')
+            trainer = Trainer(dense_model.model,
+                              train_dataset,
+                              val_dataset,
+                              config,
+                              steps_per_epoch = int(num_train_samples/config.model.batch_size),
+                              val_steps = int(num_val_samples/config.model.batch_size)
+                              )
+            print('Start training the model.')
+            trainer.train()
+            dense_model.save(".\saved_models\\M2.h5")
+        except Exception as ex:
+            print(ex)
+            print("Unable to create new model")
     else:
         print("Invalid load flag in config file")
 
     logging.info('---------Successful execution---------')
-
 
 def getData(mypath, config):
 
@@ -67,9 +68,8 @@ def getData(mypath, config):
     for fname in data_dict:
         data.append(DataLoader(fname,
                                window=config.experiment.window,
-                               threshold=config.experiment.threshold,
-                               featselect=config.experiment.featselect,
-                               drop=config.experiment.drop))
+                               threshold=config.experiment.threshold
+                               ))
 
     # initialize numpy arrays for training and test data
     X_train = data[0].X_train_std

@@ -17,8 +17,8 @@ class DenseModel:
         logging.info('Building model...')
         self.model = Sequential()
 
-        self.model.add(layers.Dense(self.config.model.layer1, activation='relu',input_shape=(self.features,)))
-        self.model.add(layers.Dense(self.config.model.layer2, activation='relu'))
+        self.model.add(layers.Dense(self.config.model.layer1,activation='relu',input_shape=(self.features,)))
+        self.model.add(layers.Dense(self.config.model.layer2,activation='relu',))
         self.model.add(layers.Dense(self.config.model.layer3, activation='softmax'))
 
         logging.info('Compiling model...')

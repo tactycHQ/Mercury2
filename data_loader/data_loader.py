@@ -3,7 +3,6 @@ import logging
 import pandas as pd
 import sys
 import numpy as np
-from feature_selector import FeatureSelector
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.model_selection import train_test_split
 logging.basicConfig(level=logging.DEBUG ,
@@ -13,14 +12,12 @@ logging.basicConfig(level=logging.DEBUG ,
 
 class DataLoader:
 
-    def __init__(self,fname, window=1,threshold=0.05,featselect=0,drop=0,split=0.2):
+    def __init__(self,fname, window=1,threshold=0.05,split=0.2):
 
         logging.info("----------Loading Data for %s-----------",fname)
 
         self.window = window
         self.threshold = threshold
-        self.featselect=featselect
-        self.drop=drop
         self.split=split
 
         self.dates = None
@@ -62,15 +59,6 @@ class DataLoader:
         #save summary of all features to csv
         df.describe(include='all').to_csv(".\\utils\\csv\\all_features.csv")
         logging.info("All Features List Saved Under all_features.csv")
-
-        # run and remove unimportant features
-        if self.featselect==1:
-            df = self.runFeatureSelector(df)
-        else: pass
-
-        # save summary of final features to csv
-        df.describe(include='all').to_csv(".\\utils\\csv\\final_features.csv")
-        logging.info("All Features List Saved Under final_features.csv")
 
         return df
 
@@ -122,43 +110,6 @@ class DataLoader:
         ohe = OneHotEncoder(categories='auto')
         self.targets_ohe = ohe.fit_transform(self.targets).toarray()
 
-
-    def runFeatureSelector(self,df):
-        logging.info(("Running Feature Selection"))
-        fs = FeatureSelector(data = df, labels=self.targets)
-
-        # Identify Missing Values
-        fs.identify_missing(missing_threshold=0.6)
-
-        # Identify Collinearity
-        fs.identify_collinear(correlation_threshold=0.98)
-        fs.record_collinear.to_csv(".\\utils\\csv\\record_collinear.csv")
-
-        # Identify Single Unique
-        fs.identify_single_unique()
-        fs.record_single_unique.to_csv(".\\utils\\csv\\record_single_unique.csv")
-
-        # Zero importance
-        fs.identify_zero_importance(task='classification',
-                                    eval_metric='multi_logloss',
-                                    n_iterations=10,
-                                    early_stopping=True)
-        fs.record_zero_importance.to_csv(".\\utils\\csv\\record_zero_importance.csv")
-
-        # Low Importance
-        fs.identify_low_importance(cumulative_importance=0.99)
-        fs.feature_importances.to_csv(".\\utils\\csv\\feature_importance.csv")
-
-        #generate summary of all operations
-        summary = pd.DataFrame.from_dict(fs.ops, orient='index')
-        summary.to_csv(".\\utils\\csv\\summary.csv")
-
-        #if drop flag is 1, go ahead and remove the suggested features
-        if self.drop==1:
-            df = fs.remove(methods='all')
-        else: pass
-
-        return df
 
     def createPctReturns(self,close):
         """
