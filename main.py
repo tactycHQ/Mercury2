@@ -49,7 +49,7 @@ def main():
         )
         print('Start training the model.')
         trainer.train()
-        dense_model.save(".\saved_models\\Mercury2.h5")
+        dense_model.save(".\saved_models\\M2.h5")
     else:
         print("Invalid load flag in config file")
 
@@ -113,5 +113,5 @@ def getData(mypath, config):
 
 if __name__ == '__main__':
     main()
-    # os.system("tensorboard --logdir=.\\logs\\")
+    os.system("tensorboard --logdir=.\\logs\\")
 

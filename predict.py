@@ -6,7 +6,7 @@ from tensorflow.keras.models import load_model
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 
-predict_path = "D:\\Dropbox\\9. Data\\Mercury Data\\XLS\\predict\\CIQ_AAPL_predict.csv"
+predict_path = "D:\\Dropbox\\9. Data\\Mercury Data\\XLS\\predict\\CIQ_NFLX_predict.csv"
 window=45
 threshold=0.035
 
@@ -41,7 +41,7 @@ sc = StandardScaler()
 sc.fit(df.values)
 x_pred = sc.transform(df.values)
 
-dense_model =load_model("C:\\Users\\anubhav\\Desktop\\Projects\\Mercury2\\saved_models\\run16.h5")
+dense_model =load_model("C:\\Users\\anubhav\\Desktop\\Projects\\Mercury2\\saved_models\\run18.h5")
 pred = dense_model.predict(x_pred)
 np.savetxt("pred.csv",pred,delimiter=",")
 
